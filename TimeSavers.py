@@ -32,16 +32,13 @@ class oiOi(bpy.types.Operator):
 
     def execute(self, context):
         #self.report({'INFO'}, "Hello world!")
-        obj = bpy.context.selected_objects[0]
-    
-        #again = obj.animation_data.action
-        # pick the fcurve to add to
-        fcurve = obj.animation_data.action.fcurves
-    
-        # add a modifier and get a reference.
-        for jeff in fcurve:
-            jeff.modifiers.new(type='STEPPED')
-        return {'FINISHED'}
+        obj = bpy.context.selected_objects
+        
+        for heh in obj:
+            fcurve = heh.animation_data.action.fcurves
+            for jeff in fcurve:
+                jeff.modifiers.new(type='STEPPED')
+            return {'FINISHED'}
 
 def register():
     bpy.utils.register_class(oiOi)
