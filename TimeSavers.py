@@ -69,22 +69,23 @@ class smearedS(bpy.types.Operator):
 
     def execute(self, context):
         #self.report({'INFO'}, "Hello world!")
-        obj = bpy.context.selected_objects[0]
-        bruv = bpy.context.scene.frame_current-obj.Start
-        bruv2 = bpy.context.scene.frame_current+obj.End+1
-        bruv3 = bpy.context.scene.frame_current-obj.Start-1
-        obj.hide_render = True
-        obj.hide_viewport = True
-        obj.keyframe_insert(data_path="hide_render", frame = bruv3)
-        obj.keyframe_insert(data_path="hide_viewport", frame = bruv3)
-        obj.hide_render = False
-        obj.hide_viewport = False
-        obj.keyframe_insert(data_path="hide_render", frame = bruv)
-        obj.keyframe_insert(data_path="hide_viewport", frame = bruv)
-        obj.hide_render = True
-        obj.hide_viewport = True
-        obj.keyframe_insert(data_path="hide_render", frame = bruv2)
-        obj.keyframe_insert(data_path="hide_viewport", frame = bruv2)
+        obj = bpy.context.selected_objects
+        for afaf in obj:
+            bruv = bpy.context.scene.frame_current-afaf.Start
+            bruv2 = bpy.context.scene.frame_current+afaf.End+1
+            bruv3 = bpy.context.scene.frame_current-afaf.Start-1
+            afaf.hide_render = True
+            afaf.hide_viewport = True
+            afaf.keyframe_insert(data_path="hide_render", frame = bruv3)
+            afaf.keyframe_insert(data_path="hide_viewport", frame = bruv3)
+            afaf.hide_render = False
+            afaf.hide_viewport = False
+            afaf.keyframe_insert(data_path="hide_render", frame = bruv)
+            afaf.keyframe_insert(data_path="hide_viewport", frame = bruv)
+            afaf.hide_render = True
+            afaf.hide_viewport = True
+            afaf.keyframe_insert(data_path="hide_render", frame = bruv2)
+            afaf.keyframe_insert(data_path="hide_viewport", frame = bruv2)
         return {'FINISHED'}
 
 def register():
