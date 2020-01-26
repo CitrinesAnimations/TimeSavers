@@ -26,7 +26,7 @@ from bpy.types import (Panel,
                        )
 
 bpy.types.Object.Start = bpy.props.IntProperty(default=0, min=0) 
-bpy.types.Object.End = bpy.props.IntProperty(default=2, min=0) 
+bpy.types.Object.End = bpy.props.IntProperty(default=1, min=0) 
 
 class Helpfullsh(bpy.types.Panel):
     bl_label = "TimeSavers"
