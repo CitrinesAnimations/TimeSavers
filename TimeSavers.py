@@ -1,7 +1,7 @@
 bl_info = {
     "name": "TimeSavers",
     "author": "Citrine's Animations",
-    "version": (1, 0, 0),
+    "version": (1, 1, 0),
     "blender": (2, 80, 0),
     "location": "Side Bar",
     "description": "Nice little time savers",
@@ -25,9 +25,41 @@ from bpy.types import (Panel,
                        PropertyGroup,
                        )
 
+def mbColourPickerUp(context, self):
+    bpy.context.object.mbColour = bpy.context.scene.obie.mbColour
+    bpy.context.scene.obie = None
+
 bpy.types.Object.Start = bpy.props.IntProperty(default=0, min=0) 
 bpy.types.Object.End = bpy.props.IntProperty(default=1, min=0) 
+bpy.types.Scene.obie = bpy.props.PointerProperty(type=bpy.types.Object, name="", update=mbColourPickerUp)
 
+def mbColourUpdate(context, self):
+    bpy.context.object.material_slots[0].material.node_tree.nodes["Group.004"].inputs[0].default_value = bpy.context.object.mbColour
+    bpy.context.object.material_slots[0].material.diffuse_color = bpy.context.object.mbColour
+
+
+
+bpy.types.Object.mbColour = bpy.props.FloatVectorProperty(name = "",subtype = "COLOR",size = 4,min = 0.0,max = 1.0, default = (0,0,0,1),update=mbColourUpdate) 
+
+class fixedUpdateC(bpy.types.Operator):
+    bl_idname = "fix.updatec"
+    bl_label = "Reload Colours"
+    
+    def execute(self, context):
+        for objs in bpy.data.objects:
+            if objs.type == 'MESH':
+                if objs.material_slots[0].material.node_tree.nodes.find("Group.004") > 0:
+                    objs.mbColour = objs.material_slots[0].material.node_tree.nodes["Group.004"].inputs[0].default_value
+        return {'FINISHED'}
+
+class indentmats(bpy.types.Operator):
+    bl_idname = "indent.mats"
+    bl_label = "SU"
+    
+    def execute(self, context):
+        bpy.context.object.material_slots[0].material = bpy.context.object.material_slots[0].material.copy()
+        return {'FINISHED'}
+    
 class Helpfullsh(bpy.types.Panel):
     bl_label = "TimeSavers"
     bl_idname = "TimeSavers"
@@ -44,6 +76,14 @@ class Helpfullsh(bpy.types.Panel):
         row.prop(obj, "Start")
         row.operator('smeared.s')
         row.prop(obj, "End")
+        row = layout.row(align=True)
+        row.split()
+        row = layout.row(align=True)
+        row.operator('fix.updatec')
+        row.operator('indent.mats', text="", icon='RESTRICT_INSTANCED_ON')
+        row = layout.row(align=True)
+        row.prop(obj, 'mbColour')
+        row.prop(context.scene, 'obie')
     
 
 
@@ -92,13 +132,16 @@ def register():
     bpy.utils.register_class(oiOi)
     bpy.utils.register_class(smearedS)
     bpy.utils.register_class(Helpfullsh)
-
+    bpy.utils.register_class(fixedUpdateC)
+    bpy.utils.register_class(indentmats)
     
 def unregister():
     bpy.utils.unregister_class(Helpfullsh)
     bpy.utils.unregister_class(oiOi)
     bpy.utils.unregister_class(smearedS)
-
+    bpy.utils.unregister_class(fixedUpdateC)
+    bpy.utils.unregister_class(indentmats)
+    
 if __name__ == '__main__':
     register()
 
