@@ -46,7 +46,7 @@ class fixedUpdateC(bpy.types.Operator):
     bl_label = "Reload Colours"
     
     def execute(self, context):
-        for objs in bpy.data.objects:
+        for objs in bpy.context.selected_objects:
             if objs.type == 'MESH':
                 if objs.material_slots[0].material.node_tree.nodes.find("Group.004") > 0:
                     objs.mbColour = objs.material_slots[0].material.node_tree.nodes["Group.004"].inputs[0].default_value
