@@ -1,7 +1,7 @@
 bl_info = {
     "name": "TimeSavers",
     "author": "Citrine's Animations",
-    "version": (1, 1, 0),
+    "version": (1, 2, 0),
     "blender": (2, 80, 0),
     "location": "Side Bar",
     "description": "Nice little time savers",
@@ -84,7 +84,46 @@ class Helpfullsh(bpy.types.Panel):
         row = layout.row(align=True)
         row.prop(obj, 'mbColour')
         row.prop(context.scene, 'obie')
+        
+        
+class Helpfullsh2(bpy.types.Panel):
+    bl_label = "Stop Motion Tools"
+    bl_idname = "StopMotionTools"
+    bl_category = "TimeSavers"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
     
+    def draw(self, context):
+        layout = self.layout
+        obj = context.object
+        row = layout.row(align=True)
+        row.operator('key.offrame', icon='REC')
+    
+
+class keyofframe(bpy.types.Operator):
+    bl_idname = "key.offrame"
+    bl_label = ""
+    bl_description = "add keyframe to all bones"
+
+
+    def execute(self, context):
+        #self.report({'INFO'}, "Hello world!")
+        if bpy.context.selected_objects[0].type == 'MESH':
+            bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+            bpy.ops.object.select_all(action='INVERT')
+            bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+            bpy.ops.object.select_all(action='INVERT')
+            return {'FINISHED'}
+        else:
+            bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+            bpy.ops.pose.select_all(action='INVERT')
+            bpy.ops.anim.keyframe_insert_menu(type='LocRotScale')
+            bpy.ops.pose.select_all(action='INVERT')
+            return {'FINISHED'}
+
+        
+        
+        
 
 
 class oiOi(bpy.types.Operator):
@@ -134,6 +173,9 @@ def register():
     bpy.utils.register_class(Helpfullsh)
     bpy.utils.register_class(fixedUpdateC)
     bpy.utils.register_class(indentmats)
+    bpy.utils.register_class(keyofframe)
+    bpy.utils.register_class(Helpfullsh2)
+    
     
 def unregister():
     bpy.utils.unregister_class(Helpfullsh)
@@ -141,6 +183,9 @@ def unregister():
     bpy.utils.unregister_class(smearedS)
     bpy.utils.unregister_class(fixedUpdateC)
     bpy.utils.unregister_class(indentmats)
+    bpy.utils.unregister_class(keyofframe)
+    bpy.utils.register_class(Helpfullsh2)
+    
     
 if __name__ == '__main__':
     register()
